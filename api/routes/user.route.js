@@ -82,7 +82,6 @@ router.post('/login', (req, res, next) => {
                 res.json({
                   token
                 });
-                console.log(token);
               }
             });
           } else {

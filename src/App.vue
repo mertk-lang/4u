@@ -15,6 +15,9 @@
         <li class="nav-item justify-content-center">
           <router-link to="/login" class="nav-link">Login</router-link>
         </li>
+        <li class="nav-item justify-content-center">
+          <router-link to="/" class="nav-link">Logout</router-link>
+        </li>
       </ul>
     </nav><br />
     <transition name="fade">

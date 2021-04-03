@@ -6,6 +6,14 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 
+function isLoggedThenPosts(to, from, next) {
+  if(localStorage.token) {
+    next('/posts');
+  } else {
+    next();
+  }
+}
+
 import VueAxios from 'vue-axios';
 import axios from 'axios';
 
@@ -41,7 +49,14 @@ const routes = [
   {
       name: 'posts',
       path: '/posts',
-      component: IndexComponent
+      component: IndexComponent,
+      beforeEnter: function(to, from, next) {
+        if(!localStorage.token) {
+          next('/login');
+        } else {
+          next();
+        }
+      }
   },
   {
       name: 'edit',
@@ -51,12 +66,14 @@ const routes = [
   {
     name: 'register',
     path: '/register',
-    component: RegisterComponent
+    component: RegisterComponent,
+    beforeEnter: isLoggedThenPosts,
   },
   {
     name: 'login',
     path: '/login',
-    component: LoginComponent
+    component: LoginComponent,
+    beforeEnter: isLoggedThenPosts,
   }
 ];
 

@@ -73,6 +73,7 @@
                         }
                     }).then(response => {
                         console.log(response);
+                        localStorage.token = response;
                         this.$router.push({name: 'posts'});
                     }).catch(error => {
                         this.errorMessage = error.response.data.message;

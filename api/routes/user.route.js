@@ -15,13 +15,25 @@ const schema = Joi.object({
   password: Joi.string().min(8).required()
 });
 
-// Auth route
-router.get('/', (req, res) => {
-  res.json({
-    message:'hello this is a test'
+function createToken(user, req, res, next) {
+  const payload = {
+    id: user._id,
+    username: req.body.username,
+  }; 
+  
+  jwt.sign(payload, process.env.TOKEN_SECRET, {
+    expiresIn: '1d'
+  }, (err, token) => {
+    if(err) {
+      res.status(422)
+      next(err);
+    } else {
+      res.json({
+        token
+      });
+    }
   });
-});
-
+}
 
 // Create User 
 router.post('/register', (req, res, next) => {
@@ -42,8 +54,9 @@ router.post('/register', (req, res, next) => {
           });
           user.save()
           .then((registeredUser) => {
-            res.json(registeredUser.username);
-            console.log(registeredUser.username);
+           // res.json(registeredUser.username);
+           // console.log(registeredUser.username);
+            createToken(registeredUser, req, res, next);
           })
         })
       }
@@ -68,22 +81,7 @@ router.post('/login', (req, res, next) => {
         bcrypt.compare(req.body.password, user.password)
         .then(result => {
           if(result) {
-            let payload = {
-              id: user._id,
-              username: req.body.username,
-            }
-            jwt.sign(payload, process.env.TOKEN_SECRET, {
-              expiresIn: '1d'
-            }, (err, token) => {
-              if(err) {
-                res.status(422)
-                next(err);
-              } else {
-                res.json({
-                  token
-                });
-              }
-            });
+            createToken(user, req, res, next);
           } else {
             res.status(406);
             let error = new Error('Wrong password');

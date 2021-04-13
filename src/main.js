@@ -74,7 +74,7 @@ const routes = [
     path: '/login',
     component: LoginComponent,
     beforeEnter: isLoggedThenPosts,
-  }
+  },
 ];
 
 const router = new VueRouter({ mode: 'history', routes: routes});

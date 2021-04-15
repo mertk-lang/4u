@@ -87,9 +87,7 @@ router.post('/login', (req, res, next) => {
             let error = new Error('Wrong password');
             next(error);
           }
-        }).catch((error) => {
-          console.log(error);
-        });
+        })
       } else {
         res.status(404);
         let error = new Error("Unable to login");

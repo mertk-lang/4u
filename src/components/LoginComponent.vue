@@ -1,6 +1,6 @@
 <template>
   <div>
-    <form @submit.prevent="login">
+    <form v-if="user" @submit.prevent="login">
       <div v-if="errorMessage" class="alert alert-danger" role="alert">
         {{ errorMessage }}
       </div>
@@ -51,12 +51,23 @@ export default {
         username: "",
         password: "",
       },
+      loading: false,
     };
+  },
+  created() {
+    this.user = {
+      username: "",
+      password: "",
+    };
+
+    this.$emit("login", this.user);
+    this.loading = true;
   },
   watch: {
     user: {
       handler() {
         this.errorMessage = "";
+        this.$forceUpdate();
       },
       deep: true,
     },
@@ -85,8 +96,9 @@ export default {
             },
           })
           .then((response) => {
-            console.log(response);
             localStorage.token = response.data.token;
+            this.user = body;
+            this.$emit("update-user", this.user);
             this.$router.push({ name: "posts" });
           })
           .catch((error) => {

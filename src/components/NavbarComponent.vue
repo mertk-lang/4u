@@ -22,7 +22,7 @@
             <router-link to="#" class="nav-link">Not logged in</router-link>
           </li>
           <li v-if="user" class="nav-item justify-content-center">
-            <router-link to="#" class="nav-link">{{ user.username }}</router-link>
+            <router-link to="#" class="nav-link"> {{ user.username }} </router-link>
           </li>
         </ul>
       </nav>
@@ -78,55 +78,34 @@ br {
 </style>
 
 <script>
-//import Navbar from "./components/NavbarComponent";
 const userApi = `http://localhost:4000/`;
 
 export default {
   data() {
     return {
       backgroundColor: "#1b0042",
-      token: false,
     };
   },
   props: {
-    user: {
-      type: [String, Array],
-    },
+    user: Object,
   },
   watch: {
-    user: {
-      handler() {
-        this.$forceUpdate();
-      },
-      deep: true,
+    user: function () {
+      this.axios
+        .get(userApi, {
+          headers: {
+            authorization: `Bearer ${localStorage.token}`,
+          },
+        })
+        .then((res) => {
+          this.user = res.data.user;
+        });
     },
-  },
-  created() {
-    this.axios
-      .get(userApi, {
-        headers: {
-          authorization: `Bearer ${localStorage.token}`,
-        },
-      })
-      .then((res) => {
-        console.log(res);
-        if (res) {
-          this.setUser(res);
-        } else {
-          this.logout();
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   },
   methods: {
     logout() {
       localStorage.removeItem("token");
       this.$router.push("/login");
-    },
-    setUser(res) {
-      this.user = res.data.user;
     },
   },
 };

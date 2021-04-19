@@ -18,11 +18,13 @@
           <li class="nav-item justify-content-center">
             <button @click="logout()" class="nav-link">Logout</button>
           </li>
-          <li v-if="!user" class="nav-item justify-content-center">
+          <li v-if="!getUser" class="nav-item justify-content-center">
             <router-link to="#" class="nav-link">Not logged in</router-link>
           </li>
-          <li v-if="user" class="nav-item justify-content-center">
-            <router-link to="#" class="nav-link"> {{ user.username }} </router-link>
+          <li v-if="getUser" class="nav-item justify-content-center">
+            <router-link to="#" class="nav-link">
+              {{ getUser.username }}
+            </router-link>
           </li>
         </ul>
       </nav>
@@ -35,6 +37,36 @@
   </div>
 </template>
 
+<script>
+import { mapGetters, mapActions } from "vuex";
+
+export default {
+  name: "Navbar",
+  data() {
+    return {
+      backgroundColor: "#1b0042",
+    };
+  },
+  methods: {
+    ...mapActions({
+      signOutAction: "signOut",
+    }),
+    logout() {
+      this.signOutAction().then(() => {
+        this.$router.replace({
+          name: "home",
+        });
+      });
+    },
+  },
+  computed: {
+    ...mapGetters({
+      getUser: "getUser",
+    }),
+  },
+};
+</script>
+
 <style>
 .fade-enter-active,
 .fade-leave-active {
@@ -44,7 +76,6 @@
 .fade-leave-active {
   opacity: 0;
 }
-
 .navbar-wrapper {
   position: absolute;
   top: 0;
@@ -55,58 +86,20 @@
   background-color: #140030;
   height: 100%;
 }
-
 .navbar-wrapper > .container-fluid {
   padding-right: 0;
   padding-left: 0;
   width: inherit;
 }
-
 .navbar-wrapper .navbar {
   padding-right: 15px;
   padding-left: 15px;
   width: 100% !important;
 }
-
 button {
   color: transparent;
 }
-
 br {
   display: none;
 }
 </style>
-
-<script>
-const userApi = `http://localhost:4000/`;
-
-export default {
-  data() {
-    return {
-      backgroundColor: "#1b0042",
-    };
-  },
-  props: {
-    user: Object,
-  },
-  watch: {
-    user: function () {
-      this.axios
-        .get(userApi, {
-          headers: {
-            authorization: `Bearer ${localStorage.token}`,
-          },
-        })
-        .then((res) => {
-          this.user = res.data.user;
-        });
-    },
-  },
-  methods: {
-    logout() {
-      localStorage.removeItem("token");
-      this.$router.push("/login");
-    },
-  },
-};
-</script>

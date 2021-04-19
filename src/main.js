@@ -1,10 +1,12 @@
-import Vue from 'vue'
-import App from './App.vue'
-import FlashMessage from '@smartweb/vue-flash-message';
+import Vue from 'vue';
+import App from './App.vue';
+import store from './store';
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 import VueRouter from 'vue-router';
 Vue.use(VueRouter);
+
+require('@/store/subscriber');
 
 function isLoggedThenPosts(to, from, next) {
   if(localStorage.token) {
@@ -19,11 +21,10 @@ import axios from 'axios';
 
 
 Vue.use(VueAxios, axios);
-Vue.use(FlashMessage);
+
 
 
 Vue.config.productionTip = false;
-
 
 
 import HomeComponent from './components/HomeComponent.vue';
@@ -79,5 +80,10 @@ const routes = [
 
 const router = new VueRouter({ mode: 'history', routes: routes});
 
+store.dispatch('checkToken', localStorage.getItem('token')).then(() => {
+  new Vue({render: h => h(App), store, router , components: {App}}).$mount('#app');
+}).catch(() => {
+  this.$router.push('/home');
+})
 
-new Vue(Vue.util.extend({ router }, App)).$mount('#app');
+

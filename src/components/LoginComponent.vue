@@ -1,14 +1,14 @@
 <template>
   <div>
-    <form v-if="user" @submit.prevent="login">
-      <div v-if="errorMessage" class="alert alert-danger" role="alert">
-        {{ errorMessage }}
+    <form @submit.prevent="submit">
+      <div v-if="getError" class="alert alert-danger" role="alert">
+        {{ getError }}
       </div>
       <div class="form-group">
         <label for="input-username">Username</label>
         <input
           type="username"
-          v-model="user.username"
+          v-model="form.username"
           class="form-control"
           id="input-username"
           placeholder="Username"
@@ -18,7 +18,7 @@
         <label for="input-password">Password</label>
         <input
           type="password"
-          v-model="user.password"
+          v-model="form.password"
           class="form-control"
           id="input-password"
           placeholder="Password"
@@ -30,82 +30,35 @@
 </template>
 
 <script>
-import Joi from "joi";
-
-const api = `http://localhost:4000/auth/login`;
-
-const schema = Joi.object({
-  username: Joi.string()
-    .regex(/(^[a-zA-Z0-9_]+$)/)
-    .min(2)
-    .max(30)
-    .required(),
-  password: Joi.string().min(8).required(),
-});
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   data() {
     return {
-      errorMessage: "",
-      user: {
+      form: {
         username: "",
         password: "",
       },
-      loading: false,
     };
-  },
-  created() {
-    this.user = {
-      username: "",
-      password: "",
-    };
-
-    this.$emit("login", this.user);
-    this.loading = true;
-  },
-  watch: {
-    user: {
-      handler() {
-        this.errorMessage = "";
-        this.$forceUpdate();
-      },
-      deep: true,
-    },
   },
   methods: {
-    validUser() {
-      const validation = schema.validate(this.user);
-      if (validation.error === undefined) {
-        return true;
-      } else {
-        this.errorMessage = validation.error.message;
-        return false;
-      }
-    },
-    login() {
-      if (this.validUser()) {
-        const body = {
-          username: this.user.username,
-          password: this.user.password,
-        };
+    ...mapActions({
+      authenticateUser: "authenticateUser",
+    }),
 
-        this.axios
-          .post(api, body, {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          })
-          .then((response) => {
-            localStorage.token = response.data.token;
-            this.user = body;
-            this.$emit("update-user", this.user);
-            this.$router.push({ name: "posts" });
-          })
-          .catch((error) => {
-            this.errorMessage = error.response.data.message;
-          });
-      }
+    submit() {
+      this.authenticateUser(this.form).then(() => {
+        this.$router.replace({
+          name: "posts",
+        });
+      });
     },
+  },
+  computed: {
+    ...mapGetters({
+      getUser: "getUser",
+      getError: "getError",
+    }),
   },
 };
 </script>
@@ -114,7 +67,6 @@ export default {
 #input-username {
   width: 300px;
 }
-
 #input-password {
   width: 300px;
 }

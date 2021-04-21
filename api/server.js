@@ -30,7 +30,7 @@ app.use(middlewares.checkTokenSetUser);
 
 
 app.use('/auth', require('./routes/user.route.js'));
-app.use('/posts', require('./routes/post.route.js'));
+app.use('/posts', middlewares.isLoggedIn, require('./routes/post.route.js'));
 
 app.use('/', (req, res) => {
   res.json({

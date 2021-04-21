@@ -20,8 +20,20 @@ function checkTokenSetUser(req, res, next) {
   }
 }
 
+function isLoggedIn(req, res, next) {
+  if(!req.user) {
+    res.status(401);
+    let error = new Error('You need to be logged in.')
+    next(error);
+  } else {
+    next();
+  }
+}
+
+
 
 module.exports = {
     checkTokenSetUser,
+    isLoggedIn
 };
 

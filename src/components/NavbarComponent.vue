@@ -22,9 +22,7 @@
             <router-link to="#" class="nav-link">Not logged in</router-link>
           </li>
           <li v-if="getUser" class="nav-item justify-content-center">
-            <router-link to="#" class="nav-link">
-              {{ getUser.username }}
-            </router-link>
+            <router-link to="#" class="nav-link">{{ getUser.username }}</router-link>
           </li>
         </ul>
       </nav>

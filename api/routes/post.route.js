@@ -18,9 +18,13 @@ router.get('/', (req, res) => {
 // Post(Create) Route
 
 router.post('/add', (req, res) => {
-    let post = new Post(req.body);
+    let post = new Post({
+        ...req.body,
+        author: req.user.id
+    });
     post.save()
-    .then(() => {
+    .then((post) => {
+        console.log(post)
         res.status(200).json({post: 'post'})
     })    
 })

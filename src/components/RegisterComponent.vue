@@ -1,12 +1,16 @@
 <template>
   <div class="text-center">
-    <form @submit.prevent="registerUser" class="mt-3" enctype="application/json">
+    <form
+      @submit.prevent="registerUser"
+      class="d-flex flex-column justify-content-center align-items-center mt-5"
+      enctype="application/json"
+    >
       <div v-if="errorMessage" class="alert alert-danger" role="alert">
         {{ errorMessage }}
       </div>
-      <h2 class="header">Sign up</h2>
-      <div class="form-group form-group-username">
-        <label for="username"></label>
+      <h2 class="header mb-4">Sign up</h2>
+      <div class="mt-2 form-group d-flex flex-column align-items-center">
+        <label for="username">Username</label>
         <input
           type="username"
           v-model="user.username"
@@ -16,8 +20,8 @@
           required
         />
       </div>
-      <div class="form-group col-md-6 form-group-password">
-        <label for="password"></label>
+      <div class="mt-2 form-group d-flex flex-column align-items-center">
+        <label for="password">Password</label>
         <input
           type="password"
           v-model="user.password"
@@ -27,8 +31,8 @@
           required
         />
       </div>
-      <div class="form-group col-md-6 form-group-password">
-        <label for="confirmPassword"></label>
+      <div class="mt-2 form-group d-flex flex-column align-items-center">
+        <label for="confirmPassword">Verify Password</label>
         <input
           type="password"
           v-model="user.confirmPassword"
@@ -38,7 +42,7 @@
           required
         />
       </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="submit" class="mt-3 btn btn-primary">Submit</button>
     </form>
   </div>
 </template>
@@ -128,6 +132,18 @@ export default {
 }
 
 .form-group-password {
+  width: 300px;
+}
+
+#username {
+  width: 300px;
+}
+
+#password {
+  width: 300px;
+}
+
+#confirmPassword {
   width: 300px;
 }
 

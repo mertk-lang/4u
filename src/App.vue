@@ -5,8 +5,6 @@
   </div>
 </template>
 
-<style></style>
-
 <script>
 import Navbar from "./components/NavbarComponent";
 export default {
@@ -16,3 +14,10 @@ export default {
   },
 };
 </script>
+
+<style>
+#app {
+  font-family: "Open Sans", sans-serif;
+  font-weight: 400;
+}
+</style>

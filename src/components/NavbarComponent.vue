@@ -1,43 +1,42 @@
 <template>
   <div class="navbar-wrapper">
     <div class="container-fluid">
-      <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <router-link to="/" class="nav-link">Home</router-link>
-          </li>
-          <li class="nav-item">
-            <router-link to="/posts" class="nav-link">Posts</router-link>
-          </li>
-          <li class="nav-item justify-content-center">
-            <router-link to="/register" class="nav-link">Sign Up</router-link>
-          </li>
-          <li class="nav-item justify-content-center">
-            <router-link to="/login" class="nav-link">Login</router-link>
-          </li>
-          <li class="nav-item justify-content-center">
-            <button @click="logout()" class="nav-link">Logout</button>
-          </li>
-          <li v-if="!getUser" class="nav-item justify-content-center">
-            <router-link to="#" class="nav-link">Not logged in</router-link>
-          </li>
-          <li v-if="getUser" class="nav-item justify-content-center">
-            <router-link to="#" class="nav-link">{{ getUser.username }}</router-link>
-          </li>
+      <nav class="navbar-main navbar-expand-sm bg-dark navbar-dark">
+        <ul class="navbar-main-list navbar-nav container p-1">
+          <div class="navbar-general">
+            <li class="nav-item">
+              <router-link to="/" class="nav-link">Home</router-link>
+            </li>
+            <li class="nav-item">
+              <router-link to="/posts" class="nav-link">Posts</router-link>
+            </li>
+          </div>
+          <div class="navbar-client">
+            <li v-if="!getUser" class="nav-item">
+              <router-link to="/register" class="nav-link">Sign Up</router-link>
+            </li>
+            <li v-if="!getUser" class="nav-item">
+              <router-link to="/login" class="nav-link">Login</router-link>
+            </li>
+            <li v-if="getUser" class="nav-item">
+              <button @click="logout()" class="nav-link">Logout</button>
+            </li>
+            <li v-if="getUser" class="nav-item">
+              <router-link to="#" class="nav-link">{{ getUser.username }}</router-link>
+            </li>
+          </div>
         </ul>
       </nav>
       <br />
       <transition name="fade">
-        <router-view class="container"></router-view>
+        <router-view></router-view>
       </transition>
     </div>
-    <FlashMessage :position="'right bottom'"></FlashMessage>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-
 export default {
   name: "Navbar",
   data() {
@@ -94,6 +93,20 @@ export default {
   padding-left: 15px;
   width: 100% !important;
 }
+
+.navbar-general {
+  display: flex;
+}
+
+.navbar-client {
+  display: flex;
+}
+
+.navbar-main-list {
+  display: flex;
+  justify-content: space-between;
+}
+
 button {
   color: transparent;
 }

@@ -1,10 +1,14 @@
 <template>
   <div>
-    <form @submit.prevent="submit">
+    <form
+      class="d-flex flex-column justify-content-center align-items-center mt-5"
+      @submit.prevent="submit"
+    >
       <div v-if="getError" class="alert alert-danger" role="alert">
         {{ getError }}
       </div>
-      <div class="form-group">
+      <h2 class="header mb-4">Login</h2>
+      <div class="mt-2 form-group d-flex flex-column align-items-center">
         <label for="input-username">Username</label>
         <input
           type="username"
@@ -14,7 +18,7 @@
           placeholder="Username"
         />
       </div>
-      <div class="form-group">
+      <div class="mt-2 form-group d-flex flex-column align-items-center">
         <label for="input-password">Password</label>
         <input
           type="password"
@@ -24,7 +28,7 @@
           placeholder="Password"
         />
       </div>
-      <button type="submit" class="btn btn-primary">Login</button>
+      <button type="submit" class="mt-3 btn btn-primary">Login</button>
     </form>
   </div>
 </template>

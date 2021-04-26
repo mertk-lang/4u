@@ -15,17 +15,19 @@
       <div class="card">
         <img class="card-img-top" v-bind:src="post.image" alt="Card image cap" />
         <div class="card-body text-dark">
+          <h3>{{ post.author.username }}</h3>
+          <h6 class="card-title">{{ post.author.createdAt }}</h6>
           <h5 class="card-title">{{ post.title }}</h5>
           <p class="card-text">{{ post.body }}</p>
           <router-link
-            v-if="post.author === getUser.id"
+            v-if="post.author.username === getUser.username"
             id="edit-post"
             :to="{ name: 'edit', params: { id: post._id } }"
             class="btn btn-outline-warning"
             >Edit</router-link
           >
           <button
-            v-if="post.author === getUser.id"
+            v-if="post.author.username === getUser.username"
             id="delete-post"
             @click="deletePost(post._id)"
             class="btn btn-outline-danger"
@@ -52,6 +54,7 @@ export default {
   created() {
     this.axios.get(postApi).then((res) => {
       this.posts = res.data;
+      console.log(res.data);
     });
   },
   methods: {

@@ -6,7 +6,12 @@ const Post = require('../models/post.model');
 // Index Page
 
 router.get('/', (req, res) => {
-    Post.find({}, (err, posts) => {
+    Post.find({})
+    .populate({ path: 'author',
+                populate: {
+                    path: 'posts'
+                }})
+    .exec(function(err, posts) {
         if(err) {
             res.json(err);
         } else {

@@ -31,8 +31,10 @@
       <div class="row h-100 justify-content-center align-items-center">
         <div class="col-md-6">
           <div class="form-group">
-            <input type="file" accept="image/*" @change="openFile(event)" /><br />
-            <img id="output" />
+            <div class="custom-file mb-3">
+              <input type="file" name="file" id="file" class="custom-file-input" />
+              <label for="file" class="custom-file-label">Choose File</label>
+            </div>
           </div>
         </div>
       </div>
@@ -50,6 +52,7 @@ export default {
   data() {
     return {
       post: {},
+      imageOutput: "",
     };
   },
   methods: {
@@ -64,8 +67,8 @@ export default {
       reader.onload = function () {
         let dataURL = reader.result;
         console.log(dataURL);
-        let output = document.getElementById("output");
-        output.src = dataURL;
+        this.imageOutput = document.getElementById("output");
+        this.imageOutput.src = dataURL;
       };
     },
   },

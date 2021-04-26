@@ -8,7 +8,7 @@ const Post = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         autopopulate: true
-    }
-})
+    },
+    }, {timestamps: true})
 
 module.exports = mongoose.model('Post', Post);

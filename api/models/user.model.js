@@ -13,7 +13,6 @@ const User = new mongoose.Schema({
     posts: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Post",
-        autopopulate: true
     }]
 }, {timestamps: true}
 );

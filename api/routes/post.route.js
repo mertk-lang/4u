@@ -7,15 +7,12 @@ const Post = require('../models/post.model');
 
 router.get('/', (req, res) => {
     Post.find({})
-    .populate({ path: 'author',
-                populate: {
-                    path: 'posts'
-                }})
-    .exec(function(err, posts) {
+    .populate('author')
+    .then((err, posts) => {
         if(err) {
             res.json(err);
         } else {
-            res.json(posts);
+            res.json(posts)
         }
     })
 })
@@ -24,10 +21,13 @@ router.get('/', (req, res) => {
 
 router.post('/add', (req, res) => {
     let post = new Post({
-        ...req.body,
+        title: req.body.title,
+        body: req.body.body,
+        image: req.body.image,
         author: req.user.id
     });
     post.save()
+    .populate('author')
     .then((post) => {
         console.log(post)
         res.status(200).json({post: 'post'})

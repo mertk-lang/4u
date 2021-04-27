@@ -52,7 +52,6 @@ export default {
   data() {
     return {
       post: {},
-      imageOutput: "",
     };
   },
   methods: {
@@ -61,15 +60,6 @@ export default {
       this.axios.post(url, this.post).then(() => {
         this.$router.push({ name: "posts" });
       });
-    },
-    openFile() {
-      let reader = new FileReader();
-      reader.onload = function () {
-        let dataURL = reader.result;
-        console.log(dataURL);
-        this.imageOutput = document.getElementById("output");
-        this.imageOutput.src = dataURL;
-      };
     },
   },
 };

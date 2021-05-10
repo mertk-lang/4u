@@ -33,6 +33,7 @@ import IndexComponent from './components/IndexComponent.vue';
 import EditComponent from './components/EditComponent.vue';
 import RegisterComponent from './components/RegisterComponent.vue';
 import LoginComponent from './components/LoginComponent.vue';
+import VibeComponent from './components/VibeComponent.vue';
 
 import './assets/global.css';
 
@@ -76,6 +77,11 @@ const routes = [
     component: LoginComponent,
     beforeEnter: isLoggedThenPosts,
   },
+  {
+    name: 'vibe',
+    component: VibeComponent,
+    path: '/vibe'
+  }
 ];
 
 const router = new VueRouter({ mode: 'history', routes: routes});

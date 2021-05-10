@@ -1,17 +1,22 @@
 const express = require('express');
 const router = express.Router();
 const Post = require('../models/post.model');
-
+const multer = require('multer');
+const { storage } = require('../cloudinary')
+const upload = multer({ storage })
+const auth = require('../middlewares/middlewares');
 
 // Index Page
 
 router.get('/', (req, res) => {
     Post.find({})
     .populate('author')
+    .populate('image')
     .then((err, posts) => {
         if(err) {
             res.json(err);
         } else {
+            console.log(posts);
             res.json(posts)
         }
     })
@@ -19,19 +24,19 @@ router.get('/', (req, res) => {
 
 // Post(Create) Route
 
-router.post('/add', (req, res) => {
+router.post('/add', auth.isLoggedIn, upload.single('image'), (req, res, next) => {
     let post = new Post({
         title: req.body.title,
         body: req.body.body,
-        image: req.body.image,
-        author: req.user.id
+        author: req.user.id,
+        image: {
+            url: req.file.path,                                              
+            filename: req.file.filename
+        }
     });
-    post.save()
-    .populate('author')
-    .then((post) => {
-        console.log(post)
+    post.save().then((post) => {
         res.status(200).json({post: 'post'})
-    })    
+    })     
 })
 
 // Edit Post route
@@ -74,7 +79,7 @@ router.delete('/delete/:id',  (req, res) => {
         if(err){
             res.json(err);
         } else {
-            res.json('Removal was successful');
+            res.status(200).json('removal was successful');
         }
     });
 });

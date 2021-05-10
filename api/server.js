@@ -7,8 +7,12 @@ const config = require('./DB.js');
 
 require('dotenv').config();
 
+if(process.env.NODE_ENV !== "production") {
+  require('dotenv').config();
+}
+
 const app = express();
-const middlewares = require('./routes/middlewares');
+const middlewares = require('./middlewares/middlewares');
 
 
 
@@ -49,7 +53,7 @@ function notFound(req, res, next) {
   next(error);
 }
 
-function errorHandler(err, req, res, next) {
+function errorHandler(err, req, res,) {
   res.status(res.statusCode || 500);
   res.json({
     message: err.message,

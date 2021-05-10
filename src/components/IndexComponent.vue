@@ -1,8 +1,7 @@
 <template>
   <div class="main-div">
-    <div class="row">
-      <div class="col-md-10"></div>
-      <div class="col-md-2">
+    <div>
+      <div>
         <router-link :to="{ name: 'create' }" class="btn btn-primary"
           >Create Post</router-link
         >
@@ -10,9 +9,9 @@
     </div>
     <div v-for="post in posts" :key="post.id">
       <template v-if="post.author">
-        <div class="card">
-          <img class="card-img-top" v-bind:src="post.image" alt="Card image cap" />
+        <div class="card my-4">
           <div class="card-body text-dark">
+            <img class="card-img-top" v-bind:src="post.image.url" alt="Card image cap" />
             <h3>{{ post.author.username }}</h3>
             <h6 class="card-title">{{ post.author.createdAt }}</h6>
             <h5 class="card-title">{{ post.title }}</h5>
@@ -52,15 +51,14 @@ export default {
   created() {
     this.axios.get(postApi).then((res) => {
       this.posts = res.data;
-      console.log(this.posts);
+      console.log(res.data);
     });
   },
   methods: {
-    deletePost(id) {
+    deletePost(id, post) {
       let url = `http://localhost:4000/posts/delete/${id}`;
-      this.axios.delete(url).then((res) => {
-        console.log(res);
-        this.posts.splice(this.posts.indexOf(id), 1);
+      this.axios.delete(url).then(() => {
+        this.posts.splice(this.posts.indexOf(post), 1);
       });
     },
   },
@@ -73,16 +71,9 @@ export default {
 </script>
 
 <style scoped>
-.card {
-  width: 50rem;
-  margin: auto;
-  margin-bottom: 28px;
-  border: none;
-}
-#edit-post {
-  margin: 0px 10px;
-}
-#delete-post {
-  margin-right: 5px;
+.card-img-top {
+  width: 100%;
+
+  object-fit: cover;
 }
 </style>

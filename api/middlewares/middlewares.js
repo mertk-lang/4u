@@ -7,7 +7,8 @@ function checkTokenSetUser(req, res, next) {
     if (token) {
       jwt.verify(token, process.env.TOKEN_SECRET, (error, user) => {
         if (error) {
-          console.log(error);
+          res.status(401);
+          next(error);
         }  
         req.user = user;
         next();
@@ -29,7 +30,6 @@ function isLoggedIn(req, res, next) {
     next();
   }
 }
-
 
 
 module.exports = {
